@@ -44,7 +44,7 @@ return function(){script.runInContext(context);return context}`
  {
   if(combined.startsWith('{'))
    combined = 'return ' + combined
-  let body = 'return function(){let exports={};let module={};'
+  body = 'return function(){let exports={};let module={};'
   for(let tag in globals) 
    body += 'let ' + tag + '=globals.' + tag + ';' 
   body += combined + 'return module.exports?module.exports:exports}' 
