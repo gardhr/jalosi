@@ -31,15 +31,14 @@ function compile(scripts, globals)
   globals[key] = global[key]
  if(!globals.require)
   globals.require = require  
+ let body = undefined 
  try
  { 
   globals.nodule = combined
-  let body = 
+  body = 
 `const vm=globals.require('vm');let script=new vm.Script
 (globals.nodule);let context=vm.createContext(globals);
 return function(){script.runInContext(context);return context}`
-  let compiled = new Function('globals', body)
-  return compiled(globals)
  }
  catch(ignored) 
  {
@@ -49,9 +48,9 @@ return function(){script.runInContext(context);return context}`
   for(let tag in globals) 
    body += 'let ' + tag + '=globals.' + tag + ';' 
   body += combined + 'return module.exports?module.exports:exports}' 
-  let compiled = new Function('globals', body)
-  return compiled(globals) 
  }
+ let compiled = new Function('globals', body)
+ return compiled(globals) 
 }
 
 const run = (scripts, globals) => compile(scripts, globals)()
