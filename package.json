@@ -1,0 +1,23 @@
+{
+ "name": "nodule",
+ "version": "0.0.0",
+ "description": "Javascript module-loading simplified",
+ "main": "nodule.js",
+ "scripts": {
+  "start": "node nodule"
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/gardhr/nodule.git"
+ },
+ "homepage": "https://github.com/gardhr/nodule#readme",
+ "keywords": [
+  "JSON alternative"
+ ],
+ "author": "Gardhr",
+ "license": "MIT",
+ "bugs": {
+  "url": "https://github.com/gardhr/nodule/issues"
+ },
+ "bin": "./nodule"
+}
