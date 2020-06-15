@@ -23,8 +23,8 @@ function compile(scripts, globals) {
     if (combined == "") throw new Error();
     globals.nodule = combined;
     let body = `const vm=globals.require('vm');let script=new vm.Script
-(globals.nodule);let context=vm.createContext(globals);
-return function(){script.runInContext(context);return context}`;
+     (globals.nodule);let context=vm.createContext(globals);
+     return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
     compiled.globals = globals;
     return compiled(globals);
