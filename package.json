@@ -1,26 +1,19 @@
 {
  "name": "jalosi",
- "version": "0.0.1",
+ "version": "0.0.11",
  "description": "JAvascript LOading SImplified",
  "main": "jalosi.js",
- "scripts": {
-  "start": "node jalosi"
- },
  "repository": {
   "type": "git",
   "url": "git+https://github.com/gardhr/jalosi.git"
  },
  "homepage": "https://github.com/gardhr/jalosi#readme",
- "keywords": [
-  "JSON alternative",
-  "load as node module"
- ],
  "author": "Gardhr",
  "license": "MIT",
  "bugs": {
   "url": "https://github.com/gardhr/jalosi/issues"
  },
- "dependencies": {
-  "system.js": "file:../system.js"
- }
+ "keywords": [
+  "javascript load node+browser stack"
+ ], 
 }
