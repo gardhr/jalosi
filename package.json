@@ -12,12 +12,17 @@
  },
  "homepage": "https://github.com/gardhr/nodule#readme",
  "keywords": [
-  "JSON alternative"
+  "JSON alternative",
+  "load as node module"
  ],
  "author": "Gardhr",
  "license": "MIT",
  "bugs": {
   "url": "https://github.com/gardhr/nodule/issues"
  },
- "bin": "./nodule"
+ "bin": "./nodule",
+ "dependencies": {
+  "cookie": "^0.4.1",
+  "system.js": "file:../system.js"
+ }
 }
