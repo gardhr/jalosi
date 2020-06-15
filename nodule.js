@@ -26,7 +26,6 @@ function compile(scripts, globals) {
      (globals.nodule);let context=vm.createContext(globals);
      return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
-    compiled.globals = globals;
     return compiled(globals);
   } catch (ignored) {
     if (combined.startsWith("{")) combined = "return " + combined;
@@ -34,7 +33,6 @@ function compile(scripts, globals) {
     for (let tag in globals) body += "let " + tag + "=globals." + tag + ";";
     body += combined + "return module.exports?module.exports:exports}";
     let compiled = new Function("globals", body);
-    compiled.globals = globals;
     return compiled(globals);
   }
 }
