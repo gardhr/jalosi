@@ -1,6 +1,6 @@
 {
  name : "jalosi",
- version: "0.0.12",
+ version: "0.0.13",
  description: "JAvascript LOading SImplified",
  main: "jalosi.js",
  repository: {
@@ -12,5 +12,8 @@
  license: "MIT",
  bugs: {
   url: "https://github.com/gardhr/jalosi/issues"
- }
+ },
+ keywords: [
+  "javascript load node+browser stack"
+ ]
 }
