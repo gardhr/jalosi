@@ -1,5 +1,5 @@
 const { statSync, readFileSync } = require("fs");
-const { resolve, normalize, extname } = require("path");
+const { resolve, normalize } = require("path");
 
 const cache = {};
 
@@ -44,7 +44,11 @@ function defer(fileNames, globals) {
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx = 0, fmx = fileNames.length; fdx < fmx; ++fdx) {
     let path = resolve(normalize(fileNames[fdx].trim()));
-    if (!extname(path)) path += ".js";
+    try {
+      statSync(path);
+    } catch (notFound) {
+      path += ".js";
+    }
     let stamp = statSync(path).mtimeMs;
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {
