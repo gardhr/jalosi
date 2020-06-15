@@ -28,6 +28,7 @@ function compile(scripts, globals) {
 (globals.nodule);let context=vm.createContext(globals);
 return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
+    compiled.globals = globals;
     return compiled(globals);
   } catch (ignored) {
     if (combined.startsWith("{")) combined = "return " + combined;
@@ -35,6 +36,7 @@ return function(){script.runInContext(context);return context}`;
     for (let tag in globals) body += "let " + tag + "=globals." + tag + ";";
     body += combined + "return module.exports?module.exports:exports}";
     let compiled = new Function("globals", body);
+    compiled.globals = globals;
     return compiled(globals);
   }
 }
@@ -43,8 +45,6 @@ const run = (scripts, globals) => compile(scripts, globals)();
 
 function defer(fileNames, globals) {
   let scripts = [];
-  let namesGlobbed = "";
-  let needsRecompile = false;
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx = 0, fmx = fileNames.length; fdx < fmx; ++fdx) {
     let path = resolve(normalize(fileNames[fdx].trim()));
@@ -54,18 +54,13 @@ function defer(fileNames, globals) {
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
       cached.stamp = stamp;
-      needsRecompile = true;
     }
     scripts.push(cached.contents);
-    if (fdx != 0) namesGlobbed += "&";
-    namesGlobbed += path;
   }
-  let glob = getFileCache(namesGlobbed);
-  if (needsRecompile) glob.deferred = compile(scripts, globals);
-  return glob.deferred;
+  return compile(scripts, globals);
 }
 
-const load = (fileNames, globals) => defer(fileNames, globals)();
+const load = (scripts, globals) => defer(scripts, globals)();
 
 load.cache = cache;
 load.compile = compile;
