@@ -21,9 +21,9 @@ function compile(scripts, globals) {
   if (!globals.Error) globals.Error = Error;
   try {
     if (combined == "") throw new Error();
-    globals.nodule = combined;
+    globals.jalosi = combined;
     let body = `const vm=globals.require('vm');let script=new vm.Script
-     (globals.nodule);let context=vm.createContext(globals);
+     (globals.jalosi);let context=vm.createContext(globals);
      return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
     return compiled(globals);

@@ -1,13 +1,13 @@
 const log = console.log;
-const nodule = require("../nodule.js");
+const jalosi = require("../jalosi.js");
 
-log(nodule("conditional", { twice: false }));
-log(nodule("conditional", { twice: true }));
+log(jalosi("conditional", { twice: false }));
+log(jalosi("conditional", { twice: true }));
 
-log(nodule("object"));
+log(jalosi("object"));
 
-var functions = nodule("functions", { print: console.log });
+var functions = jalosi("functions", { print: console.log });
 functions.foo();
 functions.bar();
 
-log(nodule("number"));
+log(jalosi("number"));

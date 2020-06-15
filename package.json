@@ -1,16 +1,16 @@
 {
- "name": "nodule",
+ "name": "jalosi",
  "version": "0.0.0",
- "description": "Javascript module-loading simplified",
- "main": "nodule.js",
+ "description": "JAvascript LOading SImplified",
+ "main": "jalosi.js",
  "scripts": {
-  "start": "node nodule"
+  "start": "node jalosi"
  },
  "repository": {
   "type": "git",
-  "url": "git+https://github.com/gardhr/nodule.git"
+  "url": "git+https://github.com/gardhr/jalosi.git"
  },
- "homepage": "https://github.com/gardhr/nodule#readme",
+ "homepage": "https://github.com/gardhr/jalosi#readme",
  "keywords": [
   "JSON alternative",
   "load as node module"
@@ -18,11 +18,9 @@
  "author": "Gardhr",
  "license": "MIT",
  "bugs": {
-  "url": "https://github.com/gardhr/nodule/issues"
+  "url": "https://github.com/gardhr/jalosi/issues"
  },
- "bin": "./nodule",
  "dependencies": {
-  "cookie": "^0.4.1",
   "system.js": "file:../system.js"
  }
 }
