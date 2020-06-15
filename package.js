@@ -1,6 +1,6 @@
 {
  name : "jalosi",
- version: "0.0.11",
+ version: "0.0.12",
  description: "JAvascript LOading SImplified",
  main: "jalosi.js",
  repository: {
