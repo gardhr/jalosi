@@ -60,7 +60,7 @@ function defer(fileNames, globals) {
   return compile(scripts, globals);
 }
 
-const load = (scripts, globals) => defer(scripts, globals)();
+const load = (fileNames, globals) => defer(fileNames, globals)();
 
 load.cache = cache;
 load.compile = compile;
