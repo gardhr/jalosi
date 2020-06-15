@@ -12,14 +12,14 @@ function getFileCache(fileName) {
 function compile(scripts, globals) {
   let combined = "";
   if (!Array.isArray(scripts)) scripts = [scripts];
-  /*
-  TODO: Check for BOM?
-*/
-
   for (let sdx = 0, smx = scripts.length; sdx < smx; ++sdx)
+    /* TODO: Check for BOM? */
+
     combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
   for (let key in global) globals[key] = global[key];
+  /* TODO: Necessary? */
+
   if (!globals.require) globals.require = require;
   try {
     if (combined == "") throw new Error();
