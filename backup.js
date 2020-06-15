@@ -16,9 +16,9 @@ function compile(scripts, globals) {
     combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
   for (let key in global) globals[key] = global[key];
-  /* KLUDGE: node seems to leave these out */
-  if (!globals.require) globals.require = require;
-  if (!globals.Error) globals.Error = Error;
+  /* TODO: Necessary? */
+
+  //if (!globals.require) globals.require = require;
   try {
     if (combined == "") throw new Error();
     globals.nodule = combined;
@@ -26,15 +26,14 @@ function compile(scripts, globals) {
 (globals.nodule);let context=vm.createContext(globals);
 return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
-    compiled.globals = globals;
     return compiled(globals);
   } catch (ignored) {
     if (combined.startsWith("{")) combined = "return " + combined;
     let body = "return function(){let exports={};let module={};";
     for (let tag in globals) body += "let " + tag + "=globals." + tag + ";";
     body += combined + "return module.exports?module.exports:exports}";
+console.log(body)    
     let compiled = new Function("globals", body);
-    compiled.globals = globals;
     return compiled(globals);
   }
 }
@@ -51,9 +50,9 @@ function defer(fileNames, globals) {
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
-      /* https://github.com/3rd-Eden/load/blob/master/index.js#L72 */
-      if (cached.contents.charCodeAt(0) == 0xfeff)
-        cached.contents = cached.contents.slice(1);
+   /* https://github.com/3rd-Eden/load/blob/master/index.js#L72 */
+      if(cached.contents.charCodeAt(0) == 0xFEFF)      
+       cached.contents = cached.contents.slice(1)
       cached.stamp = stamp;
     }
     scripts.push(cached.contents);
