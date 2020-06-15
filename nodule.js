@@ -44,6 +44,7 @@ const run = (scripts, globals) => compile(scripts, globals)();
 function defer(fileNames, globals) {
   let scripts = [];
   let namesGlobbed = "";
+  let needsRecompile = false;
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx = 0, fmx = fileNames.length; fdx < fmx; ++fdx) {
     let path = resolve(normalize(fileNames[fdx].trim()));
@@ -53,12 +54,15 @@ function defer(fileNames, globals) {
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
       cached.stamp = stamp;
+      needsRecompile = true;
     }
     scripts.push(cached.contents);
     if (fdx != 0) namesGlobbed += "&";
     namesGlobbed += path;
   }
-  return (getFileCache(namesGlobbed).deferred = compile(scripts, globals));
+  let glob = getFileCache(namesGlobbed);
+  if (needsRecompile) glob.deferred = compile(scripts, globals);
+  return glob.deferred;
 }
 
 const load = (fileNames, globals) => defer(fileNames, globals)();
