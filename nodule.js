@@ -3,22 +3,19 @@ const { resolve, normalize, extname } = require("path");
 
 const cache = {};
 
-const fileStamp = (fileName) => statSync(fileName).mtimeMs;
-
 function getFileCache(fileName) {
   let cached = cache[fileName];
   if (!cached) return (cache[fileName] = {});
   return cached;
 }
 
-const fileModified = (fileName) =>
-  getFileCache(fileName).stamp != fileStamp(fileName);
-
-const isArray = (object) => Array.isArray(object);
-
 function compile(scripts, globals) {
   let combined = "";
-  if (!isArray(scripts)) scripts = [scripts];
+  if (!Array.isArray(scripts)) scripts = [scripts];
+  /*
+  TODO: Check for BOM?
+*/
+
   for (let sdx = 0, smx = scripts.length; sdx < smx; ++sdx)
     combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
@@ -44,16 +41,14 @@ return function(){script.runInContext(context);return context}`;
 
 const run = (scripts, globals) => compile(scripts, globals)();
 
-const absolutePath = (fileName) => resolve(normalize(fileName.trim()));
-
 function defer(fileNames, globals) {
   let scripts = [];
   let namesGlobbed = "";
-  if (!isArray(fileNames)) fileNames = [fileNames];
+  if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx = 0, fmx = fileNames.length; fdx < fmx; ++fdx) {
-    let path = absolutePath(fileNames[fdx]);
+    let path = resolve(normalize(fileNames[fdx].trim()));
     if (!extname(path)) path += ".js";
-    let stamp = fileStamp(path);
+    let stamp = statSync(path).mtimeMs;
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
