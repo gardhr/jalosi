@@ -44,15 +44,15 @@ function compile(scripts, globals) {
     () => attemptCompile("return "),
     () => attemptCompile(""),
   ];
-  let error = undefined;
-  for (let fdx = 0; fdx < 3; ++fdx) {
+  let lastError = undefined;
+  for (let fdx = 0; fdx < alternatives.length; ++fdx) {
     try {
       return alternatives[fdx]();
-    } catch (next) {
-      error = next;
+    } catch (currentError) {
+      lastError = currentError;
     }
   }
-  throw error;
+  throw lastError;
 }
 
 const run = (scripts, globals) => compile(scripts, globals)();
