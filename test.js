@@ -8,19 +8,22 @@ const crlf = () => print();
 var tests = 0;
 var errors = 0;
 
-function report(message, assertion) {
+function report(useCase, assertion) {
   ++tests;
   try {
     assertion();
-    print(message + " : passed");
+    print(useCase, ": passed");
   } catch (error) {
-    complain(message + " : FAILED");
-    complain(error.toString().substr(0, 80));
     ++errors;
+    let maxLength = 80;
+    let message = error.toString();
+    if (message.length > maxLength)
+      message = message.substr(0, maxLength) + "...";
+    complain(useCase, ": FAILED (" + message + ")");
   }
 }
 
-print("****** Unit Test ******");
+print("********** Unit Test **********");
 crlf();
 
 report("Numeric literals", () => {
@@ -48,25 +51,31 @@ report("Arrow functions literals", () => {
 });
 
 report("Conditional literals", () => {
-  jalosi.run(
-    `
-   var value = 3;
-   if (twice) return value + value;
-   else return value;
-  `,
-    { twice: true }
+  assert.equal(
+    6,
+    jalosi.run(
+      `
+      var value = 3;
+      if (twice) return value + value;
+      else return value;
+    `,
+      { twice: true }
+    )
   );
 });
 
 report("Object literals", () => {
-  jalosi.run(
-    `
+  assert.equal(
+    563,
+    jalosi.run(
+      `
    {
     name: 'Carmichael',
     id: 563  
    }
   `
-  ).id == 563;
+    ).id
+  );
 });
 
 const EXIT_SUCCESS = 0;
@@ -77,13 +86,13 @@ var code = undefined;
 crlf();
 
 if (errors) {
-  complain("Passed", tests - errors, "of", tests, "tests.");
+  complain(" Passed", tests - errors, "of", tests, "tests.");
   code = EXIT_FAILURE;
 } else {
-  print("All tests passed.");
+  print(" All tests passed.");
   code = EXIT_SUCCESS;
 }
 
 crlf();
-print("***********************");
+print("*******************************");
 process.exit(code);
