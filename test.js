@@ -23,7 +23,7 @@ function report(useCase, assertion) {
   }
 }
 
-print("********** Unit Test **********");
+print("************ Unit Test ************");
 crlf();
 
 report("Numeric literals", () => {
@@ -94,5 +94,5 @@ if (errors) {
 }
 
 crlf();
-print("*******************************");
+print("***********************************");
 process.exit(code);
