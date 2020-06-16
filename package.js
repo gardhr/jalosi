@@ -16,6 +16,5 @@
  },
  keywords: [
   "javascript load node+browser stack"
- ],
- bin: "./jalosi"
+ ]
 }
