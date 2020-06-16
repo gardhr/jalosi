@@ -1,20 +1,22 @@
-{
- name : "jalosi",
- version: "1.0.1",
- modified: new Date(),
- description: "JAvascript LOading SImplified",
- main: "jalosi.js",
- repository: {
-  type: "git",
-  url: "git+https://github.com/gardhr/jalosi.git"
- },
- homepage: "https://github.com/gardhr/jalosi#readme",
- author: "Gardhr",
- license: "MIT",
- bugs: {
-  url: "https://github.com/gardhr/jalosi/issues"
- },
- keywords: [
-  "javascript load node+browser stack"
- ]
-}
+return {
+  name: "jalosi",
+  version: "1.0.1",
+  modified: new Date(),
+  description: "JAvascript LOading SImplified",
+  main: "jalosi.js",
+  repository: {
+    type: "git",
+    url: "git+https://github.com/gardhr/jalosi.git",
+  },
+  homepage: "https://github.com/gardhr/jalosi#readme",
+  author: "Gardhr",
+  license: "MIT",
+  bugs: {
+    url: "https://github.com/gardhr/jalosi/issues",
+  },
+  keywords: ["javascript load node+browser stack"],
+  scripts: {
+    install: "npm test",
+    test: "node test",
+  },
+};
