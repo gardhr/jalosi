@@ -22,12 +22,28 @@ function report(message, assertion) {
 print("****** Unit Test ******");
 crlf();
 
-report("Numeric literals", () => {
+report("Numeric literals (with return statement)", () => {
   assert.equal(1024, jalosi.run("return 1024"));
 });
 
-report("String literals", () => {
+report("Numeric literals (without return statement)", () => {
+  assert.equal(1024, jalosi.run("1024"));
+});
+
+report("String literals (with return statement)", () => {
   assert.equal("foobar", jalosi.run("return 'foobar'"));
+});
+
+report("String literals (without return statement)", () => {
+  assert.equal("foobar", jalosi.run("'foobar'"));
+});
+
+report("Array literals (with return statement)", () => {
+  assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
+});
+
+report("Array literals (without return statement)", () => {
+  assert.deepEqual([1, 2, 3], jalosi.run("[1, 2, 3]"));
 });
 
 report("Anonymous functions literals", () => {
@@ -72,7 +88,7 @@ var code = undefined;
 crlf();
 
 if (errors) {
-  complain("Failed " + errors + "/" + tests + " tests.");
+  complain("Passed", tests - errors, "of", tests, "tests.");
   code = EXIT_FAILURE;
 } else {
   print("All tests passed.");
