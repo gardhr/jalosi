@@ -12,12 +12,16 @@ function getFileCache(fileName) {
 function compile(scripts, globals) {
   let combined = "";
   if (!Array.isArray(scripts)) scripts = [scripts];
-  for (let sdx = 0, smx = scripts.length; sdx < smx; ++sdx)
-    combined += scripts[sdx].trim() + ";";
+  for (let sdx in scripts) combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
-  globals.jalosi = load;
-  if (!globals.require) globals.require = require;
-  if (!globals.Error) globals.Error = Error;
+  if (!globals.jalosi) globals.jalosi = load;
+  /* Node doesn't expose everything through global object; TODO: more to add? */
+
+  if (!globals.require && typeof require !== "undefined")
+    globals.require = require;
+  if (!globals.Error && typeof Error !== "undefined") globals.Error = Error;
+  if (!globals.console && typeof console !== "undefined")
+    globals.console = console;
   for (let key in global) globals[key] = global[key];
 
   function attemptCompile(prelude) {
@@ -31,21 +35,23 @@ function compile(scripts, globals) {
 
   let alternatives = [
     () => {
-      let body =
-        `const vm=globals.require('vm');let script=new vm.Script
-     ('` +
-        combined +
-        `');let context=vm.createContext(globals);
+      /* KLUDGE: Passing string literals won't work here */
+      let savedVersion = globals.jalosi.script;
+      globals.jalosi.script = combined;
+      let body = `const vm=globals.require('vm');let script=new vm.Script
+     (globals.jalosi.script);let context=vm.createContext(globals);
      return function(){script.runInContext(context);return context}`;
-
       let compiled = new Function("globals", body);
-      return compiled(globals);
+      let result = compiled(globals);
+      /* Cleanup kludge */
+      globals.jalosi.script = savedVersion;
+      return result;
     },
     () => attemptCompile("return "),
     () => attemptCompile(""),
   ];
   let lastError = undefined;
-  for (let fdx = 0; fdx < alternatives.length; ++fdx) {
+  for (let fdx in alternatives) {
     try {
       return alternatives[fdx]();
     } catch (currentError) {
@@ -60,13 +66,21 @@ const run = (scripts, globals) => compile(scripts, globals)();
 function defer(fileNames, globals) {
   let scripts = [];
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
-  for (let fdx = 0, fmx = fileNames.length; fdx < fmx; ++fdx) {
+  for (let fdx in fileNames) {
     let path = resolve(normalize(fileNames[fdx].trim()));
-    try {
-      statSync(path);
-    } catch (notFound) {
-      path += ".js";
+
+    function fileExists(fileName) {
+      try {
+        return statSync(fileName).isFile();
+      } catch (notFound) {
+        return false;
+      }
     }
+
+    let preferredExtensions = ["", ".jso", ".js"];
+    for (let pdx in preferredExtensions)
+      if (fileExists(path + preferredExtensions[pdx]))
+        path += preferredExtensions[pdx];
     let stamp = statSync(path).mtimeMs;
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {

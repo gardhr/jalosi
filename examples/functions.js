@@ -1,7 +1,7 @@
 function foo() {
-  print("Printing from foo!");
+  console.log("Printing from foo!");
 }
 
 function bar() {
-  print("Printing from bar!");
+  console.log("Printing from bar!");
 }
