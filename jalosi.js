@@ -15,15 +15,18 @@ function compile(scripts, globals) {
   for (let sdx = 0, smx = scripts.length; sdx < smx; ++sdx)
     combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
-  for (let key in global) globals[key] = global[key];
+  globals.jalosi = load;
   /* KLUDGE: node seems to leave these out */
   if (!globals.require) globals.require = require;
   if (!globals.Error) globals.Error = Error;
+  for (let key in global) globals[key] = global[key];
   try {
     if (combined == "") throw new Error();
-    globals.jalosi = combined;
-    let body = `const vm=globals.require('vm');let script=new vm.Script
-     (globals.jalosi);let context=vm.createContext(globals);
+    let body =
+      `const vm=globals.require('vm');let script=new vm.Script
+     ('` +
+      combined +
+      `');let context=vm.createContext(globals);
      return function(){script.runInContext(context);return context}`;
     let compiled = new Function("globals", body);
     return compiled(globals);
