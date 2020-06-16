@@ -1,6 +1,6 @@
 {
   name: "jalosi",
-  version: "1.1.1",
+  version: "1.1.2",
   modified: new Date(),
   description: "JAvascript LOading SImplified",
   main: "jalosi.js",
