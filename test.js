@@ -15,6 +15,7 @@ function report(message, assertion) {
     print(message + " : passed");
   } catch (error) {
     complain(message + " : FAILED");
+    complain(error.toString().substr(0, 80));
     ++errors;
   }
 }
@@ -22,28 +23,16 @@ function report(message, assertion) {
 print("****** Unit Test ******");
 crlf();
 
-report("Numeric literals (with return statement)", () => {
+report("Numeric literals", () => {
   assert.equal(1024, jalosi.run("return 1024"));
 });
 
-report("Numeric literals (without return statement)", () => {
-  assert.equal(1024, jalosi.run("1024"));
-});
-
-report("String literals (with return statement)", () => {
+report("String literals", () => {
   assert.equal("foobar", jalosi.run("return 'foobar'"));
 });
 
-report("String literals (without return statement)", () => {
-  assert.equal("foobar", jalosi.run("'foobar'"));
-});
-
-report("Array literals (with return statement)", () => {
+report("Array literals", () => {
   assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
-});
-
-report("Array literals (without return statement)", () => {
-  assert.deepEqual([1, 2, 3], jalosi.run("[1, 2, 3]"));
 });
 
 report("Anonymous functions literals", () => {

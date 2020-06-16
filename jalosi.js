@@ -16,28 +16,43 @@ function compile(scripts, globals) {
     combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
   globals.jalosi = load;
-  /* KLUDGE: node seems to leave these out */
   if (!globals.require) globals.require = require;
   if (!globals.Error) globals.Error = Error;
   for (let key in global) globals[key] = global[key];
-  try {
-    if (combined == "") throw new Error();
-    let body =
-      `const vm=globals.require('vm');let script=new vm.Script
-     ('` +
-      combined +
-      `');let context=vm.createContext(globals);
-     return function(){script.runInContext(context);return context}`;
-    let compiled = new Function("globals", body);
-    return compiled(globals);
-  } catch (ignored) {
-    if (combined.startsWith("{")) combined = "return " + combined;
+
+  function attemptCompile(prelude) {
     let body = "return function(){let exports={};let module={};";
     for (let tag in globals) body += "let " + tag + "=globals." + tag + ";";
-    body += combined + "return module.exports?module.exports:exports}";
+    body +=
+      prelude + combined + "return module.exports?module.exports:exports}";
     let compiled = new Function("globals", body);
     return compiled(globals);
   }
+
+  let alternatives = [
+    () => {
+      let body =
+        `const vm=globals.require('vm');let script=new vm.Script
+     ('` +
+        combined +
+        `');let context=vm.createContext(globals);
+     return function(){script.runInContext(context);return context}`;
+
+      let compiled = new Function("globals", body);
+      return compiled(globals);
+    },
+    () => attemptCompile("return "),
+    () => attemptCompile(""),
+  ];
+  let error = undefined;
+  for (let fdx = 0; fdx < 3; ++fdx) {
+    try {
+      return alternatives[fdx]();
+    } catch (next) {
+      error = next;
+    }
+  }
+  throw error;
 }
 
 const run = (scripts, globals) => compile(scripts, globals)();
@@ -56,9 +71,13 @@ function defer(fileNames, globals) {
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
-      /* https://github.com/3rd-Eden/load/blob/master/index.js#L72 */
+      /* 
+         Strip out BOM marker, if present.
+         
+         [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
+      */
       if (cached.contents.charCodeAt(0) == 0xfeff)
-        cached.contents = cached.contents.slice(1);
+        cached.contents = cached.contents.substr(1);
       cached.stamp = stamp;
     }
     scripts.push(cached.contents);
