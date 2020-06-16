@@ -1,4 +1,4 @@
-return {
+{
   name: "jalosi",
   version: "1.0.1",
   modified: new Date(),
@@ -18,5 +18,5 @@ return {
   scripts: {
     install: "npm test",
     test: "node test",
-  },
+  }
 };
