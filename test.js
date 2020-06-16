@@ -38,15 +38,15 @@ report("Array literals", () => {
   assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
 });
 
-report("Anonymous functions literals", () => {
+report("Anonymous function literals", () => {
   jalosi.run("return function(){}")();
 });
 
-report("Functions literals", () => {
+report("Function literals", () => {
   jalosi.run("function fun(){}").fun();
 });
 
-report("Arrow functions literals", () => {
+report("Arrow function literals", () => {
   jalosi.run("var arrow = () => {}").arrow();
 });
 
