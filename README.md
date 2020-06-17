@@ -7,8 +7,8 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/gardhr/jalosi/blob/master/LICENSE)
 
 - [Features](#features)
-- [Examples](#examples)
 - [Installation](#installation)
+- [Examples](#examples)
 
 ## Features
 - Seamlessly reuse code between the browser and node without fussing with `module.exports`
