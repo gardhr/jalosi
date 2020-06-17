@@ -23,8 +23,20 @@ npm install jalosi
 ## Examples
 ```js
 var jalosi = require("jalosi");
-var example = jalosi.run("function ten(){ return 10 }")
-console.log(example.ten())
+var script = 
+`
+ function ten()
+ { 
+  return 10; 
+ }
+
+ function twice(value)
+ { 
+  return value + value;
+ }
+`;
+var { ten, twice } = jalosi.run(script);
+console.log(twice(ten()));
 
 ```
 
