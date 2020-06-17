@@ -1,7 +1,7 @@
 "use strict;";
 
 const { statSync, readFileSync } = require("fs");
-const { resolve, normalize } = require("path");
+const { resolve, normalize, pathSep } = require("path");
 
 const cache = {};
 
@@ -70,9 +70,12 @@ const run = (scripts, imports, options) => compile(scripts, imports, options)();
 
 function defer(fileNames, imports, options) {
   let scripts = [];
+  let directory = ""
+  if(options.path)
+   directory = normalize(options.path + pathSep)
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx in fileNames) {
-    let path = resolve(normalize(fileNames[fdx].trim()));
+    let path = directory + resolve(normalize(fileNames[fdx].trim()));
 
     function fileExists(fileName) {
       try {
