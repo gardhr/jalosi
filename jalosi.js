@@ -11,60 +11,54 @@ function getFileCache(fileName) {
   return cached;
 }
 
-function compile(scripts, globals) {
-  let combined = "";
-  if (!Array.isArray(scripts)) scripts = [scripts];
-  for (let sdx in scripts) combined += scripts[sdx].trim() + ";";
-  if (!globals) globals = {};
-  if (!globals.jalosi) globals.jalosi = load;
-  if (!globals.jalosi.sandbox) {
+function compile(scripts, imports, options) {
+  if (!imports) imports = {};
+  if (!options) options = {};
+  if (!options.sandbox) {
+    /*
+   Node doesn't make require an enumerable property
+    
+   TODO: more to add?   
+*/
+    if (this.require === undefined && typeof require !== "undefined")
+      this.require = require;
+
     let propertyNames = Object.getOwnPropertyNames(this);
     for (let adx in propertyNames) {
       let property = propertyNames[adx];
-      /*
-         TODO: Suppress deprecation warnings
-
-         DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
-         DeprecationWarning: 'root' is deprecated, use 'global'
-*/
-      if (!globals.hasOwnProperty(property)) globals[property] = this[property];
+      if (!imports.hasOwnProperty(property)) imports[property] = this[property];
     }
   }
-  /* 
-     TODO: More to add? 
-*/
-  if (!globals.require && typeof require !== "undefined")
-    globals.require = require;
+
+  let script = "";
+  if (!Array.isArray(scripts)) scripts = [scripts];
+  for (let sdx in scripts) script += scripts[sdx].trim() + ";";
 
   function attemptCompile(prelude) {
+    let parameters = imports;
     let body = "return function(){let exports={};let module={};";
-    for (let tag in globals) body += "let " + tag + "=globals." + tag + ";";
-    body +=
-      prelude + combined + "return module.exports?module.exports:exports}";
-    let compiled = new Function("globals", body);
-    return compiled(globals);
+    for (let tag in imports)
+      body += "let " + tag + "=parameters." + tag + ";delete parameters;";
+    body += prelude + script + "return module.exports?module.exports:exports}";
+    return new Function("parameters", body)(parameters);
   }
 
   let alternatives = [
     () => {
-      /* KLUDGE: Passing string literals won't work here */
-      globals.jalosi["stored-script"] = combined;
-      let body = `const vm=globals.require("vm");let script=new vm.Script
-     (globals.jalosi["stored-script"]);let context=vm.createContext(globals);
+      let parameters = { require: require, script: script, imports: imports };
+      let body = `const vm=parameters.require("vm");let script=new vm.Script
+     (parameters.script);let context=vm.createContext(parameters.imports);
      return function(){script.runInContext(context);return context}`;
-      let compiled = new Function("globals", body);
-      let result = compiled(globals);
-      /* Cleanup kludge */
-      delete globals.jalosi["stored-script"];
-      return result;
+      return new Function("parameters", body)(parameters);
     },
     () => attemptCompile("return "),
     () => attemptCompile(""),
   ];
+
   let lastError = undefined;
-  for (let fdx in alternatives) {
+  for (let adx in alternatives) {
     try {
-      return alternatives[fdx]();
+      return alternatives[adx]();
     } catch (currentError) {
       lastError = currentError;
     }
@@ -72,9 +66,9 @@ function compile(scripts, globals) {
   throw lastError;
 }
 
-const run = (scripts, globals) => compile(scripts, globals)();
+const run = (scripts, imports, options) => compile(scripts, imports, options)();
 
-function defer(fileNames, globals) {
+function defer(fileNames, imports, options) {
   let scripts = [];
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx in fileNames) {
@@ -95,9 +89,9 @@ function defer(fileNames, globals) {
     if (stamp != cached.stamp) {
       cached.contents = readFileSync(path, "utf-8");
       /* 
-         Strip out BOM marker, if present.
+        Strip out BOM marker, if present.
          
-         [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
+        [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
       */
       if (cached.contents.charCodeAt(0) == 0xfeff)
         cached.contents = cached.contents.substr(1);
@@ -105,10 +99,11 @@ function defer(fileNames, globals) {
     }
     scripts.push(cached.contents);
   }
-  return compile(scripts, globals);
+  return compile(scripts, imports, options);
 }
 
-const load = (fileNames, globals) => defer(fileNames, globals)();
+const load = (fileNames, imports, options) =>
+  defer(fileNames, imports, options)();
 
 load.cache = cache;
 load.compile = compile;

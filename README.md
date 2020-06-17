@@ -26,18 +26,18 @@ npm install jalosi
 ## Example
 ```js
 var jalosi = require("jalosi");
-var script = 
-`
- function ten()
- { 
-  return 10; 
- }
 
- function twice(value)
- { 
+var script = `
+
+function ten() {
+  return 10;
+}
+
+function twice(value) {
   return value + value;
- }
+}
 `;
+
 var { ten, twice } = jalosi.run(script);
 console.log(twice(ten()));
 
@@ -45,35 +45,35 @@ console.log(twice(ten()));
 
 ## API
 ```js
-jalosi.compile(script, imports)
+jalosi.compile(scripts, imports, options)
 ```
 
-Compiles a script with the given imports but doesn't execute the code. If no imports are specified, everything in the global scope is used. If the `script` parameter is an array then all scripts are combined together.
+Compiles an array of scripts together, but doesn't execute the code. (The `scripts` parameter can also be a single string.) If `options.sandbox` is truthy then only `imports` are made accesible to the script. Otherwise, everything from the global scope is included. (Excluding properties already defined by the `imports` object.) Returns an anonymous function.
 
 
 ```js
-jalosi.run(script, imports)
+jalosi.run(scripts, imports, options)
 ```
 
-Invokes `jalosi.compile`, then runs the code.
+Invokes `jalosi.compile`, then runs the code. Returns whatever is returned by the combined scripts.
 
 
 ```js
-jalosi.defer(file, imports)
+jalosi.defer(files, imports, options)
 ```
 
-Same as `jalosi.compile`, but reads the script from a file instead. If the `file` parameter is an array then all scripts are combined together.
+Same as `jalosi.compile`, but reads the scripts from an array of files instead. (The `files` parameter can also be a single string.) If `options.path` is set, all files will loaded from the directory that it points to. Returns an anonymous function.
 
 
 ```js
-jalosi.load(file, imports)
+jalosi.load(files, imports, options)
 ```
 
-Invokes `jalosi.defer`, then runs the code.
+Invokes `jalosi.defer`, then runs the code. Returns whatever is returned by the combined scripts.
 
 
 ```js
-jalosi(file, imports)
+jalosi(files, imports, options)
 ```
 
 Alias for `jalosi.load`.
