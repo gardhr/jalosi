@@ -1,3 +1,5 @@
+"use strict;";
+
 const { statSync, readFileSync } = require("fs");
 const { resolve, normalize } = require("path");
 
@@ -86,10 +88,8 @@ function defer(fileNames, globals) {
       }
     }
 
-    let preferredExtensions = ["", ".jso", ".js"];
-    for (let pdx in preferredExtensions)
-      if (fileExists(path + preferredExtensions[pdx]))
-        path += preferredExtensions[pdx];
+    if (fileExists(path + ".jso")) path += ".jso";
+    else if (fileExists(path + ".js")) path += ".js";
     let stamp = statSync(path).mtimeMs;
     let cached = getFileCache(path);
     if (stamp != cached.stamp) {
