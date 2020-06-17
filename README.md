@@ -12,8 +12,8 @@
 
 ## Features
 - Seamlessly reuse code between the browser and node without fussing with `module.exports`
-- Run untrusted code within a sandbox
 - Hot-reload caching of scripts loaded from files
+- Run untrusted code within a sandbox
 - Supports deferred loading
 
 ## Installation
