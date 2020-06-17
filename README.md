@@ -9,10 +9,12 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Examples](#examples)
+- [API](#api)
 
 ## Features
 - Seamlessly reuse code between the browser and node without fussing with `module.exports`
 - Hot-reload caching of scripts loaded from files
+- Native support for [JSO](https://github.com/gardhr/jalosi/wiki/JSO-file-format) files
 - Run untrusted code within a sandbox
 - Supports deferred loading
 
@@ -40,4 +42,39 @@ var { ten, twice } = jalosi.run(script);
 console.log(twice(ten()));
 
 ```
+
+## API
+```js
+jalosi.compile(script, imports)
+```
+
+Compiles a script with the given imports but doesn't execute the code. If no imports are specified, everything in the global scope is used. If the `script` parameter is an array then all scripts are combined together.
+
+
+```js
+jalosi.run(script, imports)
+```
+
+Invokes `jalosi.compile`, then runs the code.
+
+
+```js
+jalosi.defer(file, imports)
+```
+
+Same as `jalosi.compile`, but reads the script from a file instead. If the `file` parameter is an array then all scripts are combined together.
+
+
+```js
+jalosi.load(fileName, importGlobals)
+```
+
+Invokes `jalosi.defer`, then runs the code.
+
+
+```js
+jalosi(fileName, importGlobals)
+```
+
+Alias for `jalosi.load`.
 
