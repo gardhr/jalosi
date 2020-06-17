@@ -11,9 +11,10 @@
 - [Installation](#installation)
 
 ## Features
-- Seamlessly reuse code between the browser and node with fussing with `module.exports`
+- Seamlessly reuse code between the browser and node without fussing with `module.exports`
 - Run untrusted code within a sandbox
-- Deferred loading of scripts
+- Hot-reload caching of scripts loaded from files
+- Supports deferred loading
 
 ## Installation
 ```
