@@ -8,7 +8,7 @@
 
 - [Features](#features)
 - [Installation](#installation)
-- [Examples](#examples)
+- [Example](#examples)
 - [API](#api)
 
 ## Features
@@ -23,7 +23,7 @@
 npm install jalosi
 ```
 
-## Examples
+## Example
 ```js
 var jalosi = require("jalosi");
 var script = 
@@ -66,15 +66,21 @@ Same as `jalosi.compile`, but reads the script from a file instead. If the `file
 
 
 ```js
-jalosi.load(fileName, importGlobals)
+jalosi.load(fileName, imports)
 ```
 
 Invokes `jalosi.defer`, then runs the code.
 
 
 ```js
-jalosi(fileName, importGlobals)
+jalosi(fileName, imports)
 ```
 
 Alias for `jalosi.load`.
+
+```js
+jalosi.cache
+```
+
+Reference to Jalosi's file cache. (Useful for diagnostics.)
 
