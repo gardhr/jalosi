@@ -15,14 +15,24 @@ function compile(scripts, globals) {
   for (let sdx in scripts) combined += scripts[sdx].trim() + ";";
   if (!globals) globals = {};
   if (!globals.jalosi) globals.jalosi = load;
-  /* Node doesn't expose everything through global object; TODO: more to add? */
+  if (!globals.jalosi.sandbox) {
+    let propertyNames = Object.getOwnPropertyNames(this);
+    for (let adx in propertyNames) {
+      let property = propertyNames[adx];
+      /*
+         TODO: Suppress deprecation warnings
 
+         DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+         DeprecationWarning: 'root' is deprecated, use 'global'
+*/
+      if (!globals.hasOwnProperty(property)) globals[property] = this[property];
+    }
+  }
+  /* 
+     TODO: More to add? 
+*/
   if (!globals.require && typeof require !== "undefined")
     globals.require = require;
-  if (!globals.Error && typeof Error !== "undefined") globals.Error = Error;
-  if (!globals.console && typeof console !== "undefined")
-    globals.console = console;
-  for (let key in global) globals[key] = global[key];
 
   function attemptCompile(prelude) {
     let body = "return function(){let exports={};let module={};";
@@ -36,15 +46,14 @@ function compile(scripts, globals) {
   let alternatives = [
     () => {
       /* KLUDGE: Passing string literals won't work here */
-      let savedVersion = globals.jalosi.script;
-      globals.jalosi.script = combined;
-      let body = `const vm=globals.require('vm');let script=new vm.Script
-     (globals.jalosi.script);let context=vm.createContext(globals);
+      globals.jalosi["stored-script"] = combined;
+      let body = `const vm=globals.require("vm");let script=new vm.Script
+     (globals.jalosi["stored-script"]);let context=vm.createContext(globals);
      return function(){script.runInContext(context);return context}`;
       let compiled = new Function("globals", body);
       let result = compiled(globals);
       /* Cleanup kludge */
-      globals.jalosi.script = savedVersion;
+      delete globals.jalosi["stored-script"];
       return result;
     },
     () => attemptCompile("return "),
