@@ -66,14 +66,14 @@ Same as `jalosi.compile`, but reads the script from a file instead. If the `file
 
 
 ```js
-jalosi.load(fileName, imports)
+jalosi.load(file, imports)
 ```
 
 Invokes `jalosi.defer`, then runs the code.
 
 
 ```js
-jalosi(fileName, imports)
+jalosi(file, imports)
 ```
 
 Alias for `jalosi.load`.
