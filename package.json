@@ -20,5 +20,8 @@
  "scripts": {
   "install": "npm test",
   "test": "node test"
+ },
+ "dependencies": {
+  "system.js": "file:../system.js"
  }
 }
