@@ -62,7 +62,7 @@ Invokes `jalosi.compile`, then runs the code. Returns whatever is returned by th
 jalosi.defer(files, imports, options)
 ```
 
-Same as `jalosi.compile`, but reads the scripts from an array of files instead. (The `files` parameter can also be a single string.) If `options.path` is set, all files will loaded from the directory that it points to. Returns an anonymous function.
+Same as `jalosi.compile`, but reads the scripts from an array of files instead. (The `files` parameter can also be a single string.) If `options.path` is set, all files will be loaded from the directory that it points to. Returns an anonymous function.
 
 
 ```js
