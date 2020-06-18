@@ -97,7 +97,7 @@ function defer(fileNames, imports, options) {
         [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
       */
       if (cached.contents.charCodeAt(0) == 0xfeff)
-        cached.contents = cached.contents.substr(1);
+        cached.contents = cached.contents.slice(1);
       cached.stamp = stamp;
     }
     scripts.push(cached.contents);
