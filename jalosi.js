@@ -70,22 +70,21 @@ const run = (scripts, imports, options) => compile(scripts, imports, options)();
 
 function defer(fileNames, imports, options) {
   let scripts = [];
-  if (!options) options = {};
   let directory = "";
+  if (!options) options = {};
   if (options.path) directory = options.path + sep;
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
 
+  function fileExists(fileName) {
+    try {
+      return statSync(fileName).isFile();
+    } catch (notFound) {
+      return false;
+    }
+  }
+
   for (let fdx in fileNames) {
     let path = resolve(normalize(directory + fileNames[fdx].trim()));
-
-    function fileExists(fileName) {
-      try {
-        return statSync(fileName).isFile();
-      } catch (notFound) {
-        return false;
-      }
-    }
-
     if (fileExists(path + ".jso")) path += ".jso";
     else if (fileExists(path + ".js")) path += ".js";
     let stamp = statSync(path).mtimeMs;
