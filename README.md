@@ -22,7 +22,7 @@
 ```
 npm install jalosi
 ```
-
+ 
 ## Example
 ```js
 var jalosi = require("jalosi");
