@@ -69,13 +69,13 @@ function compile(scripts, imports, options) {
 const run = (scripts, imports, options) => compile(scripts, imports, options)();
 
 function defer(fileNames, imports, options) {
+  if (!options) options = {};
+  let directory = "";
+  if (options.path) directory = normalize(options.path + pathSep);
   let scripts = [];
-  let directory = ""
-  if(options.path)
-   directory = normalize(options.path + pathSep)
   if (!Array.isArray(fileNames)) fileNames = [fileNames];
   for (let fdx in fileNames) {
-    let path = directory + resolve(normalize(fileNames[fdx].trim()));
+    let path = resolve(normalize(fileNames[fdx].trim()));
 
     function fileExists(fileName) {
       try {
