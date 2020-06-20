@@ -35,21 +35,24 @@ function compile(scripts, imports, options) {
   for (let sdx in scripts) script += scripts[sdx].trim() + ";";
 
   function attemptCompile(prelude) {
-    let parameters = imports;
+    let $ = imports;
     let body = "return function(){let exports={};let module={};";
-    for (let tag in imports)
-      body += "let " + tag + "=parameters." + tag + ";delete parameters;";
-    body += prelude + script + "return module.exports?module.exports:exports}";
-    return new Function("parameters", body)(parameters);
+    for (let tag in imports) body += "let " + tag + "=$." + tag + ";";
+    body +=
+      "$=undefined;" +
+      prelude +
+      script +
+      "return module.exports?module.exports:exports}";
+    return new Function("$", body)($);
   }
 
   let alternatives = [
     () => {
-      let parameters = { require: require, script: script, imports: imports };
-      let body = `const vm=parameters.require("vm");let script=new vm.Script
-     (parameters.script);let context=vm.createContext(parameters.imports);
+      let $ = { require: require, script: script, imports: imports };
+      let body = `const vm=$.require("vm");let script=new vm.Script
+     ($.script);let context=vm.createContext($.imports);
      return function(){script.runInContext(context);return context}`;
-      return new Function("parameters", body)(parameters);
+      return new Function("$", body)($);
     },
     () => attemptCompile("return "),
     () => attemptCompile(""),
