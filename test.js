@@ -44,11 +44,11 @@ report("String literals from file", () => {
 });
 
 report("Array literals", () => {
-  assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
+  assert.deepStrictEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
 });
 
 report("Array literals from file", () => {
-  assert.deepEqual([1, 2, 3], jalosi("examples/array"));
+  assert.deepStrictEqual([1, 2, 3], jalosi("examples/array"));
 });
 
 report("Anonymous function literals", () => {
@@ -109,6 +109,24 @@ report("Object literals", () => {
 
 report("Object literals from file", () => {
   assert.equal(563, jalosi("examples/object").id);
+});
+
+report("Can invoke `require` without sandbox", () => {
+  assert.doesNotThrow(() => {
+    jalosi.run("require('fs')", null);
+  });
+});
+
+report("Cannot invoke `require` from sandbox", () => {
+  assert.throws(() => {
+    jalosi.run("require('fs')", null, { sandbox: true });
+  });
+});
+
+report("Cannot access `process` from sandbox", () => {
+  assert.throws(() => {
+    jalosi.run("process.exit()", null, { sandbox: true });
+  });
 });
 
 const EXIT_SUCCESS = 0;
