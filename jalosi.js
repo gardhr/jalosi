@@ -32,30 +32,25 @@ function compile(scripts, imports, options) {
 
   let script = "";
   if (!Array.isArray(scripts)) scripts = [scripts];
-  for (let sdx in scripts) script += scripts[sdx].trim() + ";";
-
-  function attemptCompile(prelude) {
-    let $ = imports;
-    let body = "return function(){let exports={};let module={};";
-    for (let tag in imports) body += "let " + tag + "=$." + tag + ";";
-    body +=
-      "$=undefined;" +
-      prelude +
-      script +
-      "return module.exports?module.exports:exports}";
-    return new Function("$", body)($);
+  for (let sdx in scripts) {
+    if (sdx != 0) script += ";";
+    script += scripts[sdx].trim();
+  }
+  function attemptCompile(preamble, epilogue) {
+    let body = "this.constructor = undefined;" + preamble + script + epilogue;
+    const vm = require("vm");
+    let compiler = new vm.Script(body);
+    let context = vm.createContext(imports);
+    return function () {
+      var result = compiler.runInContext(context);
+      return result ? result : context;
+    };
   }
 
   let alternatives = [
-    () => {
-      let $ = { require: require, script: script, imports: imports };
-      let body = `const vm=$.require("vm");let script=new vm.Script
-     ($.script);let context=vm.createContext($.imports);
-     return function(){script.runInContext(context);return context}`;
-      return new Function("$", body)($);
-    },
-    () => attemptCompile("return "),
-    () => attemptCompile(""),
+    () => attemptCompile("", ""),
+    () => attemptCompile("(function(){return(", ")})()"),
+    () => attemptCompile("(function(){", "})()"),
   ];
 
   let lastError = undefined;

@@ -4,7 +4,7 @@ var assert = require("assert");
 const complain = console.error;
 const print = console.log;
 const crlf = () => print();
-const suppressOutput = { console: { log: function () {} } };
+const suppressOutput = { console: { log: console.log /*function () {}*/ } };
 
 var tests = 0;
 var errors = 0;
@@ -44,11 +44,11 @@ report("String literals from file", () => {
 });
 
 report("Array literals", () => {
-  assert.deepStrictEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
+  assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
 });
 
 report("Array literals from file", () => {
-  assert.deepStrictEqual([1, 2, 3], jalosi("examples/array"));
+  assert.deepEqual([1, 2, 3], jalosi("examples/array"));
 });
 
 report("Anonymous function literals", () => {
@@ -132,7 +132,7 @@ report("Cannot access `process` from sandbox", () => {
 report("Cannot escape sandbox", () => {
   assert.throws(() => {
     jalosi.run(
-      `function test() { return new Function("return (this.constructor.constructor('return (this.process.mainModule.constructor._load)')())")() }`,
+      "this.constructor.constructor('return process')().exit()",
       null,
       { sandbox: true }
     );
