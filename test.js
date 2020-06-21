@@ -90,25 +90,25 @@ report("Conditional literals", () => {
 });
 
 report("Conditional literals from file", () => {
-  assert.equal(6, jalosi("examples/conditional", { twice: true }));
+  assert.equal(3, jalosi("examples/conditional", { twice: false }));
 });
 
 report("Object literals", () => {
   assert.equal(
-    563,
+    561,
     jalosi.run(
       `
    {
     name: 'Carmichael',
-    id: 563  
+    first: 561  
    }
   `
-    ).id
+    ).first
   );
 });
 
 report("Object literals from file", () => {
-  assert.equal(563, jalosi("examples/object").id);
+  assert.equal(561, jalosi("examples/object").first);
 });
 
 report("Can invoke `require` without sandbox", () => {
