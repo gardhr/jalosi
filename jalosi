@@ -1,34 +1,18 @@
 #! /usr/bin/env node
 
-const { statSync } = require("fs");
 const jalosi = require("./jalosi.js");
 const print = console.log;
+const argv = process.argv;
 
-var args = process.argv.slice(2);
-for (let adx in args) {
-  let fileName = args[adx];
-  print("File:", fileName);
-  try {
-    let module = jalosi(fileName);
-    if (!module) throw new Error("Error: cannot load file");
-    /* Filter out globals */
+function usage() {
+  print(`Usage: ${argv[1]} [...FILES...]`);
+}
 
-    if (module.global === global) delete module.global;
-    if (module.process === process) delete module.process;
-    if (module.Buffer === Buffer) delete module.Buffer;
-    if (module.Error === Error) delete module.Error;
-    if (module.clearImmediate === clearImmediate) delete module.clearImmediate;
-    if (module.clearInterval === clearInterval) delete module.clearInterval;
-    if (module.clearTimeout === clearTimeout) delete module.clearTimeout;
-    if (module.setImmediate === setImmediate) delete module.setImmediate;
-    if (module.setInterval === setInterval) delete module.setInterval;
-    if (module.setTimeout === setTimeout) delete module.setTimeout;
-    /* Skip these unconditionally */
-
-    delete module.require;
-    delete module.jalosi;
-    print(module);
-  } catch (error) {
-    console.error(error);
-  }
+var args = argv.slice(2);
+if (args.length == 0) return usage();
+try {
+  jalosi(args);
+} catch (error) {
+  console.error(error);
+  return usage();
 }

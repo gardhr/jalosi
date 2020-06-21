@@ -1,7 +1,7 @@
 {
  "name": "jalosi",
- "version": "1.5.8",
- "modified": "2020-06-21T15:27:40.648Z",
+ "version": "1.6.0",
+ "modified": "2020-06-21T16:51:40.296Z",
  "description": "JAvascript LOading SImplified",
  "main": "jalosi.js",
  "repository": {

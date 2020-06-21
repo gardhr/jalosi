@@ -116,4 +116,18 @@ load.compile = compile;
 load.run = run;
 load.defer = defer;
 load.load = load;
-module.exports = load;
+if (typeof module !== "undefined") module.exports = load;
+
+/*
+  Suppress deprecation warning emmitted when accessing 'GLOBAL'
+  
+  See: https://github.com/gardhr/jalosi/issues/1
+*/
+
+if (typeof process !== "undefined" && process.emitWarning) {
+  const { emitWarning } = process;
+  process.emitWarning = function () {
+    if (arguments[2] === "DEP0016") return;
+    return emitWarning.apply(null, arguments);
+  };
+}
