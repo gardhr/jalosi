@@ -35,6 +35,10 @@ report("Numeric literals from file", () => {
   assert.equal(1024, jalosi("examples/number"));
 });
 
+report("Numeric literals (no return statement)", () => {
+  assert.equal(1024, jalosi.run("1024"));
+});
+
 report("String literals", () => {
   assert.equal("This is some text!", jalosi.run("return 'This is some text!'"));
 });
@@ -43,12 +47,20 @@ report("String literals from file", () => {
   assert.equal("This is some text!", jalosi("examples/text"));
 });
 
+report("String literals (no return statement)", () => {
+  assert.equal("This is some text!", jalosi.run("'This is some text!'"));
+});
+
 report("Array literals", () => {
   assert.deepEqual([1, 2, 3], jalosi.run("return [1, 2, 3]"));
 });
 
 report("Array literals from file", () => {
   assert.deepEqual([1, 2, 3], jalosi("examples/array"));
+});
+
+report("Array literals (no return statement)", () => {
+  assert.deepEqual([1, 2, 3], jalosi.run("[1, 2, 3]"));
 });
 
 report("Anonymous function literals", () => {
