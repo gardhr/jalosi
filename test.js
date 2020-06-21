@@ -129,6 +129,16 @@ report("Cannot access `process` from sandbox", () => {
   });
 });
 
+report("Cannot escape sandbox", () => {
+  assert.throws(() => {
+    jalosi.run(
+      `function test() { return new Function("return (this.constructor.constructor('return (this.process.mainModule.constructor._load)')())")() }`,
+      null,
+      { sandbox: true }
+    );
+  });
+});
+
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
 
