@@ -4,7 +4,7 @@ var assert = require("assert");
 const complain = console.error;
 const print = console.log;
 const crlf = () => print();
-const suppressOutput = { console: { log: console.log /*function () {}*/ } };
+const suppressOutput = { console: { log: function () {} } };
 
 var tests = 0;
 var errors = 0;
