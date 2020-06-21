@@ -36,6 +36,7 @@ function compile(scripts, imports, options) {
     if (sdx != 0) script += ";";
     script += scripts[sdx].trim();
   }
+  
   function attemptCompile(preamble, epilogue) {
     let body = "this.constructor = undefined;" + preamble + script + epilogue;
     const vm = require("vm");
