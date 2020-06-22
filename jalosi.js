@@ -38,10 +38,10 @@ function compile(scripts, imports, options) {
   }
 
   function attemptCompile(preamble, epilogue) {
-    let body =
-      "'use strict';this.constructor=undefined;" + preamble + script + epilogue;
     const vm = require("vm");
-    let compiler = new vm.Script(body);
+    let compiler = new vm.Script(
+      "'use strict';this.constructor=undefined;" + preamble + script + epilogue
+    );
     let context = vm.createContext(imports);
     return function () {
       var result = compiler.runInContext(context);
