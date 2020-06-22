@@ -38,7 +38,8 @@ function compile(scripts, imports, options) {
   }
 
   function attemptCompile(preamble, epilogue) {
-    let body = "this.constructor = undefined;" + preamble + script + epilogue;
+    let body =
+      "'use strict';this.constructor=undefined;" + preamble + script + epilogue;
     const vm = require("vm");
     let compiler = new vm.Script(body);
     let context = vm.createContext(imports);
