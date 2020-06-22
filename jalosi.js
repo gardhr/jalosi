@@ -1,5 +1,3 @@
-"use strict";
-
 const { statSync } = require("fs");
 const { resolve, normalize, sep } = require("path");
 const getCachedFile = require("ssfc");
@@ -88,7 +86,7 @@ function defer(fileNames, imports, options) {
 const load = (fileNames, imports, options) =>
   defer(fileNames, imports, options)();
 
-load.cache = getCachedFile.cache;
+load.cache = getCachedFile;
 load.compile = compile;
 load.run = run;
 load.defer = defer;
