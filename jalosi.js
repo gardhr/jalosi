@@ -1,15 +1,8 @@
 "use strict;";
 
-const { statSync, readFileSync } = require("fs");
+const { statSync } = require("fs");
 const { resolve, normalize, sep } = require("path");
-
-const cache = {};
-
-function getFileCache(fileName) {
-  let cached = cache[fileName];
-  if (!cached) return (cache[fileName] = {});
-  return cached;
-}
+const getCachedFile = require("ssfc");
 
 function compile(scripts, imports, options) {
   if (!imports) imports = {};
@@ -18,7 +11,7 @@ function compile(scripts, imports, options) {
     /*
       Node doesn't make require an enumerable property
     
-      TODO: more to add?   
+      TODO: More to add?   
 */
     if (this.require === undefined && typeof require !== "undefined")
       this.require = require;
@@ -87,20 +80,7 @@ function defer(fileNames, imports, options) {
     let path = resolve(normalize(directory + fileNames[fdx].trim()));
     if (fileExists(path + ".jso")) path += ".jso";
     else if (fileExists(path + ".js")) path += ".js";
-    let stamp = statSync(path).mtimeMs;
-    let cached = getFileCache(path);
-    if (stamp != cached.stamp) {
-      cached.contents = readFileSync(path, "utf-8");
-      /* 
-        Strip out BOM marker, if present.
-         
-        [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
-      */
-      if (cached.contents.charCodeAt(0) == 0xfeff)
-        cached.contents = cached.contents.slice(1);
-      cached.stamp = stamp;
-    }
-    scripts.push(cached.contents);
+    scripts.push(getCachedFile(path, { utf: true }));
   }
   return compile(scripts, imports, options);
 }
@@ -108,7 +88,7 @@ function defer(fileNames, imports, options) {
 const load = (fileNames, imports, options) =>
   defer(fileNames, imports, options)();
 
-load.cache = cache;
+load.cache = getCachedFile;
 load.compile = compile;
 load.run = run;
 load.defer = defer;

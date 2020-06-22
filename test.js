@@ -1,6 +1,6 @@
 var jalosi = require(".");
 var assert = require("assert");
-
+jalosi.run("1024");
 const complain = console.error;
 const print = console.log;
 const crlf = () => print();
