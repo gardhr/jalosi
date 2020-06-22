@@ -1,4 +1,4 @@
-"use strict;";
+"use strict";
 
 const { statSync } = require("fs");
 const { resolve, normalize, sep } = require("path");
