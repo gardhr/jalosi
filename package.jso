@@ -18,5 +18,8 @@
   scripts: {
     install: "npm test",
     test: "node test",
+  },
+  dependencies: {
+    ssfc: "*"
   }
 };
