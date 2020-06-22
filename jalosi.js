@@ -45,7 +45,7 @@ function compile(scripts, imports, options) {
     let context = vm.createContext(imports);
     return function () {
       var result = compiler.runInContext(context);
-      return result ? result : context;
+      return result === undefined ? context : result;
     };
   }
 
