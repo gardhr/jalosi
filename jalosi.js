@@ -86,7 +86,7 @@ function defer(fileNames, imports, options) {
 const load = (fileNames, imports, options) =>
   defer(fileNames, imports, options)();
 
-load.cache = getCachedFile;
+load.cache = getCachedFile.cache;
 load.compile = compile;
 load.run = run;
 load.defer = defer;
