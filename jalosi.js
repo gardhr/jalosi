@@ -16,9 +16,9 @@ function compile(scripts, imports, options) {
   if (!options) options = {};
   if (!options.sandbox) {
     /*
-   Node doesn't make require an enumerable property
+      Node doesn't make require an enumerable property
     
-   TODO: more to add?   
+      TODO: more to add?   
 */
     if (this.require === undefined && typeof require !== "undefined")
       this.require = require;
