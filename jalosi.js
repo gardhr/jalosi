@@ -21,9 +21,9 @@ module.exports = (function () {
       cached.contents = readFileSync(fileName, "utf-8");
 
       /* 
-        Strip out BOM marker, if present.
+          Strip out BOM marker, if present.
          
-        [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
+          [https://github.com/nodejs/node-v0.x-archive/issues/1918] 
 */
       if (cached.contents.charCodeAt(0) == 0xfeff)
         cached.contents = cached.contents.slice(1);
@@ -62,15 +62,14 @@ module.exports = (function () {
     function attemptCompile(preamble, epilogue) {
       const vm = require("vm");
       let compiler = new vm.Script(
-        "'use strict';this.constructor=undefined;" +
-          preamble +
-          script +
-          epilogue
+        "'use strict';this.constructor=this;" + preamble + script + epilogue
       );
       let context = vm.createContext(imports);
       return function () {
         var result = compiler.runInContext(context);
-        return result === undefined ? context : result;
+        return context.constructor !== context.constructor.constructor
+          ? context
+          : result;
       };
     }
 

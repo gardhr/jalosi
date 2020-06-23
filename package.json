@@ -1,7 +1,7 @@
 {
  "name": "jalosi",
- "version": "1.7.9",
- "modified": "2020-06-23T00:19:13.907Z",
+ "version": "1.8.0",
+ "modified": "2020-06-23T01:27:31.607Z",
  "description": "JAvascript LOading SImplified",
  "main": "jalosi.js",
  "repository": {
@@ -15,7 +15,7 @@
   "url": "https://github.com/gardhr/jalosi/issues"
  },
  "keywords": [
-  "javascript load node+browser stack"
+  "sandbox javascript load module node+browser stack"
  ],
  "scripts": {
   "install": "npm test",
