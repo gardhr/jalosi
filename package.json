@@ -1,7 +1,7 @@
 {
  "name": "jalosi",
- "version": "1.7.8",
- "modified": "2020-06-22T23:06:28.112Z",
+ "version": "1.7.9",
+ "modified": "2020-06-23T00:19:13.907Z",
  "description": "JAvascript LOading SImplified",
  "main": "jalosi.js",
  "repository": {
@@ -20,8 +20,5 @@
  "scripts": {
   "install": "npm test",
   "test": "node test"
- },
- "dependencies": {
-  "ssfc": "*"
  }
 }

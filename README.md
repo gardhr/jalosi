@@ -17,6 +17,8 @@
 - Native support for [JSO](https://github.com/gardhr/jalosi/wiki/JSO-file-format) files
 - Run untrusted code within a sandbox
 - Supports deferred loading
+- No dependencies, single-file implementation
+- Lightweight, less than 4k (uncompressed)
 
 ## Installation
 ```
