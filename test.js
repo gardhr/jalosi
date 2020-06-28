@@ -151,6 +151,14 @@ report("Cannot escape sandbox", () => {
   });
 });
 
+report("Cannot escape sandbox", () => {
+  assert.throws(() => {
+    jalosi.run("Function.constructor('return process')().exit()", null, {
+      sandbox: true,
+    });
+  });
+});
+
 report("Can load instance", () => {
   assert.equal(1024, jalosi.run("run('return 1024')"));
 });

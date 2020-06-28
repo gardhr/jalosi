@@ -75,6 +75,8 @@ module.exports = (function () {
 */
         if (this.require === undefined && typeof require !== "undefined")
           this.require = require;
+        if (this.console === undefined && typeof console !== "undefined")
+          this.console = console;
         if (this.compile === undefined) this.compile = compile;
         if (this.run === undefined) this.run = run;
         if (this.defer === undefined) this.defer = defer;
