@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = (function () {
   const { resolve, normalize, sep } = require("path");
   const { statSync, readFileSync } = require("fs");
@@ -32,84 +34,100 @@ module.exports = (function () {
     return cached.contents;
   }
 
-  function compile(scripts, imports, options) {
-    if (!imports) imports = {};
-    if (!options) options = {};
-    if (!options.sandbox) {
-      /*
-        Node doesn't make require an enumerable property
-    
-        TODO: More to add?   
-*/
-      if (this.require === undefined && typeof require !== "undefined")
-        this.require = require;
-
-      let propertyNames = Object.getOwnPropertyNames(this);
-      for (let adx in propertyNames) {
-        let property = propertyNames[adx];
-        if (!imports.hasOwnProperty(property))
-          imports[property] = this[property];
-      }
-    }
-
-    let script = "";
-    if (!Array.isArray(scripts)) scripts = [scripts];
-    for (let sdx in scripts) {
-      if (sdx != 0) script += ";";
-      script += scripts[sdx].trim();
-    }
-
-    function attemptCompile(preamble, epilogue) {
-      const vm = require("vm");
-      let compiler = new vm.Script(
-        "'use strict';this.constructor=this;" + preamble + script + epilogue
-      );
-      let context = vm.createContext(imports);
-      return function () {
-        var result = compiler.runInContext(context);
-        return context.constructor !== context.constructor.constructor
-          ? context
-          : result;
-      };
-    }
-
-    let alternatives = [
-      () => attemptCompile("", ""),
-      () => attemptCompile("(function(){return(", ")})()"),
-      () => attemptCompile("(function(){", "})()"),
-    ];
-
-    let lastError = undefined;
-    for (let adx in alternatives) {
-      try {
-        return alternatives[adx]();
-      } catch (currentError) {
-        lastError = currentError;
-      }
-    }
-    throw lastError;
-  }
+  var compile = null;
 
   const run = (scripts, imports, options) =>
     compile(scripts, imports, options)();
 
   function defer(fileNames, imports, options) {
-    let scripts = [];
-    let directory = "";
-    if (!options) options = {};
-    if (options.path) directory = options.path + sep;
-    if (!Array.isArray(fileNames)) fileNames = [fileNames];
-    for (let fdx in fileNames) {
-      let path = resolve(normalize(directory + fileNames[fdx].trim()));
-      if (fileExists(path + ".jso")) path += ".jso";
-      else if (fileExists(path + ".js")) path += ".js";
-      scripts.push(getCachedFile(path));
+    try {
+      let scripts = [];
+      let directory = "";
+      if (!options) options = {};
+      if (options.path) directory = options.path + sep;
+      if (!Array.isArray(fileNames)) fileNames = [fileNames];
+      for (let fdx in fileNames) {
+        let path = resolve(normalize(directory + fileNames[fdx].trim()));
+        if (fileExists(path + ".jso")) path += ".jso";
+        else if (fileExists(path + ".js")) path += ".js";
+        scripts.push(getCachedFile(path));
+      }
+      return compile(scripts, imports, options);
+    } catch (error) {
+      if (options.throws) throw error;
     }
-    return compile(scripts, imports, options);
   }
 
   const load = (fileNames, imports, options) =>
     defer(fileNames, imports, options)();
+
+  compile = function compiler(scripts, imports, options) {
+    if (!(this instanceof compiler))
+      return new compiler(scripts, imports, options);
+    try {
+      if (!imports) imports = {};
+      if (!options) options = {};
+      if (!options.sandbox) {
+        /*
+        Node doesn't make require an enumerable property
+    
+        TODO: More to add?   
+*/
+        if (global.require === undefined && typeof require !== "undefined")
+          global.require = require;
+        if (global.compile === undefined) global.compile = compile;
+        if (global.run === undefined) global.run = run;
+        if (global.defer === undefined) global.defer = defer;
+        if (global.load === undefined) global.load = load;
+
+        let propertyNames = Object.getOwnPropertyNames(global);
+        for (let adx in propertyNames) {
+          let property = propertyNames[adx];
+          if (!imports.hasOwnProperty(property))
+            imports[property] = global[property];
+        }
+      }
+
+      let script = "";
+      if (!Array.isArray(scripts)) scripts = [scripts];
+      for (let sdx in scripts) {
+        if (sdx != 0) script += ";";
+        script += scripts[sdx].trim();
+      }
+
+      function attemptCompile(preamble, epilogue) {
+        const vm = require("vm");
+        let compiler = new vm.Script(
+          "'use strict';this.constructor=this;" + preamble + script + epilogue
+        );
+        let context = vm.createContext(imports);
+        return function () {
+          var result = compiler.runInContext(context);
+          return context.constructor !== context.constructor.constructor
+            ? context
+            : result;
+        };
+      }
+
+      let alternatives = [
+        () => attemptCompile("", ""),
+        () => attemptCompile("(function(){return(", ")})()"),
+        () => attemptCompile("(function(){", "})()"),
+      ];
+
+      let lastError = undefined;
+      for (let adx in alternatives) {
+        try {
+          return alternatives[adx]();
+        } catch (currentError) {
+          lastError = currentError;
+        }
+      }
+      throw lastError;
+    } catch (error) {
+      if (options.throws) throw error;
+    }
+  };
 
   load.compile = compile;
   load.run = run;

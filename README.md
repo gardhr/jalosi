@@ -1,4 +1,4 @@
-# Jalosi 
+# Jalosi
 
 [![npm version](https://badge.fury.io/js/jalosi.png)](https://badge.fury.io/js/jalosi)
 [![NPM Downloads](https://img.shields.io/npm/dm/jalosi)](https://www.npmjs.com/package/jalosi)
@@ -12,6 +12,7 @@
 - [API](#api)
 
 ## Features
+
 - Seamlessly reuse code between the browser and node without fussing with `module.exports`
 - Hot-reload caching of scripts loaded from files
 - Native support for [JSO](https://github.com/gardhr/jalosi/wiki/JSO-file-format) files
@@ -21,11 +22,13 @@
 - Lightweight, less than 4k (uncompressed)
 
 ## Installation
+
 ```
 npm install jalosi
 ```
- 
+
 ## Example
+
 ```js
 var jalosi = require("jalosi");
 
@@ -42,48 +45,42 @@ function twice(value) {
 
 var { ten, twice } = jalosi.run(script);
 console.log(twice(ten()));
-
 ```
 
 ## API
+
 ```js
-jalosi.compile(scripts, imports, options)
+jalosi.compile(scripts, imports, options);
 ```
 
 Compiles an array of scripts together, but doesn't execute the code. (The `scripts` parameter can also be a single string.) If `options.sandbox` is truthy then only `imports` are made accesible to the script. Otherwise, everything from the global scope is included. (Excluding properties already defined by the `imports` object.) Returns an anonymous function.
 
-
 ```js
-jalosi.run(scripts, imports, options)
+jalosi.run(scripts, imports, options);
 ```
 
 Invokes `jalosi.compile`, then runs the code. Returns whatever is returned by the combined scripts.
 
-
 ```js
-jalosi.defer(files, imports, options)
+jalosi.defer(files, imports, options);
 ```
 
 Same as `jalosi.compile`, but reads the scripts from an array of files instead. (The `files` parameter can also be a single string.) If `options.path` is set, all files will be loaded from the directory that it points to. Returns an anonymous function.
 
-
 ```js
-jalosi.load(files, imports, options)
+jalosi.load(files, imports, options);
 ```
 
 Invokes `jalosi.defer`, then runs the code. Returns whatever is returned by the combined scripts.
 
-
 ```js
-jalosi(files, imports, options)
+jalosi(files, imports, options);
 ```
 
 Alias for `jalosi.load`.
 
 ```js
-jalosi.cache
+jalosi.cache;
 ```
 
 Reference to Jalosi's file cache. (Useful for diagnostics.)
-
-
