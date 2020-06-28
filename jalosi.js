@@ -79,6 +79,7 @@ module.exports = (function () {
         if (this.run === undefined) this.run = run;
         if (this.defer === undefined) this.defer = defer;
         if (this.load === undefined) this.load = load;
+        if (this.jalosi === undefined) this.jalosi = load;
 
         let propertyNames = Object.getOwnPropertyNames(this);
         for (let adx in propertyNames) {
