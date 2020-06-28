@@ -73,18 +73,18 @@ module.exports = (function () {
     
         TODO: More to add?   
 */
-        if (global.require === undefined && typeof require !== "undefined")
-          global.require = require;
-        if (global.compile === undefined) global.compile = compile;
-        if (global.run === undefined) global.run = run;
-        if (global.defer === undefined) global.defer = defer;
-        if (global.load === undefined) global.load = load;
+        if (this.require === undefined && typeof require !== "undefined")
+          this.require = require;
+        if (this.compile === undefined) this.compile = compile;
+        if (this.run === undefined) this.run = run;
+        if (this.defer === undefined) this.defer = defer;
+        if (this.load === undefined) this.load = load;
 
-        let propertyNames = Object.getOwnPropertyNames(global);
+        let propertyNames = Object.getOwnPropertyNames(this);
         for (let adx in propertyNames) {
           let property = propertyNames[adx];
           if (!imports.hasOwnProperty(property))
-            imports[property] = global[property];
+            imports[property] = this[property];
         }
       }
 
