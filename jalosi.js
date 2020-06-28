@@ -99,8 +99,7 @@ module.exports = (function () {
       function attemptCompile(preamble, epilogue) {
         const vm = require("vm");
         let compiler = new vm.Script(
-          `"use strict";this.constructor=this;` 
-          + preamble + script + epilogue
+          `"use strict";this.constructor=this;` + preamble + script + epilogue
         );
         let context = vm.createContext(imports);
         return function () {
