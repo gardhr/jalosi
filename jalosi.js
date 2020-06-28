@@ -34,7 +34,7 @@ module.exports = (function () {
     return cached.contents;
   }
 
-  var compile = null;
+  var compile = undefined;
 
   const run = (scripts, imports, options) =>
     compile(scripts, imports, options)();
