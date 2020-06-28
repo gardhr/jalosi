@@ -1,24 +1,24 @@
 {
-  "name": "jalosi",
-  "version": "1.8.0",
-  "modified": "2020-06-23T01:27:31.607Z",
-  "description": "JAvascript LOading SImplified",
-  "main": "jalosi.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gardhr/jalosi.git"
-  },
-  "homepage": "https://github.com/gardhr/jalosi#readme",
-  "author": "Gardhr",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gardhr/jalosi/issues"
-  },
-  "keywords": [
-    "sandbox javascript load module node+browser stack"
-  ],
-  "scripts": {
-    "install": "npm test",
-    "test": "node test"
-  }
+ "name": "jalosi",
+ "version": "1.8.0",
+ "modified": "2020-06-28T15:33:37.329Z",
+ "description": "JAvascript LOading SImplified",
+ "main": "jalosi.js",
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/gardhr/jalosi.git"
+ },
+ "homepage": "https://github.com/gardhr/jalosi#readme",
+ "author": "Gardhr",
+ "license": "MIT",
+ "bugs": {
+  "url": "https://github.com/gardhr/jalosi/issues"
+ },
+ "keywords": [
+  "sandbox javascript load module node+browser stack"
+ ],
+ "scripts": {
+  "install": "npm test",
+  "test": "node test"
+ }
 }
