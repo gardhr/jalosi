@@ -1,28 +1,30 @@
 var major = 2,
   medium = 0,
-  minor = 3;
+  minor = 4;
+var repo = `jalosi`,
+  git = `https://github.com/gardhr/${repo}`;
 return {
-  name: "jalosi",
+  name: `${repo}`,
   major: major,
   medium: medium,
   minor: minor,
-  version: major + "." + medium + "." + minor,
+  version: major + `.` + medium + `.` + minor,
   modified: Date(),
-  description: "JAvascript LOading SImplified",
-  main: "jalosi.js",
+  description: `JAvascript LOading SImplified`,
+  main: `${repo}.js`,
   repository: {
-    type: "git",
-    url: "git+https://github.com/gardhr/jalosi.git",
+    type: `git`,
+    url: `git+${git}.git`,
   },
-  homepage: "https://github.com/gardhr/jalosi#readme",
-  author: "Gardhr",
-  license: "MIT",
+  homepage: `${git}#readme`,
+  author: `Gardhr`,
+  license: `MIT`,
   bugs: {
-    url: "https://github.com/gardhr/jalosi/issues",
+    url: `${git}/issues`,
   },
-  keywords: ["sandbox javascript load module node+browser stack"],
+  keywords: [`sandbox javascript load module node+browser stack`],
   scripts: {
-    install: "npm test",
-    test: "node test",
+    install: `npm test`,
+    test: `node test`,
   },
 };
