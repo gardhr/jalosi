@@ -10,7 +10,9 @@ if(system("node test"))
  system("jtj") 
  system("jtj --write")
  if(args[0] == "publish")
-  system(`gitt`, "npm publish")
+{
+  system(`gitt`)
+ system("npm publish")
 } 
-
+}
 
