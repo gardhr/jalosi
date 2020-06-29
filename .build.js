@@ -9,6 +9,9 @@ if (system("node test")) {
   system("prettier --parser typescript --write package.jso");
   system("jtj");
   system("jtj --write");
+  if (args[0] == "update") {
+    system(`gitt`);
+  }
   if (args[0] == "publish") {
     system(`gitt`);
     system("npm publish");
