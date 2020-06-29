@@ -11,14 +11,6 @@ if(system("node test"))
  system("jtj --write")
  if(args[0] == "publish")
   system(`gitt ${args[1]?args[1]:""}`, "npm publish")
- for(let adx in args)
- {
-  let what = args[adx]
-  if(what == "publish")
-  {
-   system("gitt", "npm publish")
-  }
- }
 } 
 
 
