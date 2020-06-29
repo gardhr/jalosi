@@ -1,7 +1,13 @@
-{
+var major = 2,
+  medium = 0,
+  minor = 3;
+return {
   name: "jalosi",
-  version: "2.0.2",
-  modified: new Date(),
+  major: major,
+  medium: medium,
+  minor: minor,
+  version: major + "." + medium + "." + minor,
+  modified: Date(),
   description: "JAvascript LOading SImplified",
   main: "jalosi.js",
   repository: {
@@ -18,5 +24,5 @@
   scripts: {
     install: "npm test",
     test: "node test",
-  }
+  },
 };
