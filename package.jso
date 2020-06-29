@@ -1,6 +1,6 @@
 var major = 2,
   medium = 0,
-  minor = 4;
+  minor = 5;
 var repo = `jalosi`,
   git = `https://github.com/gardhr/${repo}`;
 return {
