@@ -54,7 +54,7 @@ module.exports = (function () {
       }
       return compile(scripts, imports, options);
     } catch (error) {
-      if (options.throws) throw error;
+      if (options.throws !== false) throw error;
     }
   }
 
@@ -131,7 +131,7 @@ module.exports = (function () {
       }
       throw lastError;
     } catch (error) {
-      if (options.throws) throw error;
+      if (options.throws !== false) throw error;
     }
   };
 
