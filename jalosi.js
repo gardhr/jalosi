@@ -85,15 +85,6 @@ module.exports = (function () {
           if (imports[property] === undefined)
             conglomerate[property] = global[property];
         }
-
-        if (typeof this !== "undefined") {
-          let thisPropertyNames = Object.getOwnPropertyNames(this);
-          for (let tdx in thisPropertyNames) {
-            let property = thisPropertyNames[tdx];
-            if (imports[property] === undefined)
-              conglomerate[property] = this[property];
-          }
-        }
       }
 
       let script = "";
