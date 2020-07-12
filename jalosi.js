@@ -79,11 +79,20 @@ module.exports = (function () {
         if (imports.load === undefined) conglomerate.load = load;
         if (imports.jalosi === undefined) conglomerate.jalosi = load;
 
-        let propertyNames = Object.getOwnPropertyNames(global);
-        for (let adx in propertyNames) {
-          let property = propertyNames[adx];
+        let globalPropertyNames = Object.getOwnPropertyNames(global);
+        for (let gdx in globalPropertyNames) {
+          let property = globalPropertyNames[gdx];
           if (imports[property] === undefined)
             conglomerate[property] = global[property];
+        }
+
+        if (typeof this !== "undefined") {
+          let thisPropertyNames = Object.getOwnPropertyNames(this);
+          for (let tdx in thisPropertyNames) {
+            let property = thisPropertyNames[tdx];
+            if (imports[property] === undefined)
+              conglomerate[property] = this[property];
+          }
         }
       }
 
