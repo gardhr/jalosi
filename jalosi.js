@@ -34,12 +34,10 @@ module.exports = (function () {
     return cached.contents;
   }
 
-  var compile = undefined;
-
   const run = (scripts, imports, options) =>
     compile(scripts, imports, options)();
 
-  function defer(fileNames, imports, options) {
+  const defer = (fileNames, imports, options) => {
     try {
       let scripts = [];
       let directory = "";
@@ -56,14 +54,12 @@ module.exports = (function () {
     } catch (error) {
       if (options.throws !== false) throw error;
     }
-  }
+  };
 
   const load = (fileNames, imports, options) =>
     defer(fileNames, imports, options)();
 
-  compile = function compiler(scripts, imports, options) {
-    if (!(this instanceof compiler))
-      return new compiler(scripts, imports, options);
+  const compile = (scripts, imports, options) => {
     try {
       let conglomerate = {};
       if (!imports) imports = {};
@@ -84,6 +80,15 @@ module.exports = (function () {
           let property = globalPropertyNames[gdx];
           if (imports[property] === undefined)
             conglomerate[property] = global[property];
+        }
+
+        if (typeof this !== "undefined") {
+          let thisPropertyNames = Object.getOwnPropertyNames(this);
+          for (let tdx in thisPropertyNames) {
+            let property = thisPropertyNames[tdx];
+            if (imports[property] === undefined)
+              conglomerate[property] = this[property];
+          }
         }
       }
 
