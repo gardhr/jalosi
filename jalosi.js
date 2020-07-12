@@ -65,29 +65,24 @@ module.exports = (function () {
     if (!(this instanceof compiler))
       return new compiler(scripts, imports, options);
     try {
+      let conglomerate = {};
       if (!imports) imports = {};
       if (!options) options = {};
+      for (let property in imports) conglomerate[property] = imports[property];
       if (!options.sandbox) {
-        /*
-        Node doesn't make require an enumerable property
-    
-        TODO: More to add?   
-*/
-        if (this.require === undefined && typeof require !== "undefined")
-          this.require = require;
-        if (this.console === undefined && typeof console !== "undefined")
-          this.console = console;
-        if (this.compile === undefined) this.compile = compile;
-        if (this.run === undefined) this.run = run;
-        if (this.defer === undefined) this.defer = defer;
-        if (this.load === undefined) this.load = load;
-        if (this.jalosi === undefined) this.jalosi = load;
+        if (imports.require === undefined && typeof require !== "undefined")
+          conglomerate.require = require;
+        if (imports.compile === undefined) conglomerate.compile = compile;
+        if (imports.run === undefined) conglomerate.run = run;
+        if (imports.defer === undefined) conglomerate.defer = defer;
+        if (imports.load === undefined) conglomerate.load = load;
+        if (imports.jalosi === undefined) conglomerate.jalosi = load;
 
-        let propertyNames = Object.getOwnPropertyNames(this);
+        let propertyNames = Object.keys(global);
         for (let adx in propertyNames) {
           let property = propertyNames[adx];
-          if (!imports.hasOwnProperty(property))
-            imports[property] = this[property];
+          if (imports[property] === undefined)
+            conglomerate[property] = global[property];
         }
       }
 
@@ -106,7 +101,7 @@ module.exports = (function () {
             script +
             epilogue
         );
-        let context = vm.createContext(imports);
+        let context = vm.createContext(conglomerate);
         return function () {
           var result = compiler.runInContext(context);
           return context.constructor !== context.constructor.constructor
