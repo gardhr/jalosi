@@ -72,13 +72,14 @@ module.exports = (function () {
       if (!options.sandbox) {
         if (imports.require === undefined && typeof require !== "undefined")
           conglomerate.require = require;
+
         if (imports.compile === undefined) conglomerate.compile = compile;
         if (imports.run === undefined) conglomerate.run = run;
         if (imports.defer === undefined) conglomerate.defer = defer;
         if (imports.load === undefined) conglomerate.load = load;
         if (imports.jalosi === undefined) conglomerate.jalosi = load;
 
-        let propertyNames = Object.keys(global);
+        let propertyNames = Object.getOwnPropertyNames(global);
         for (let adx in propertyNames) {
           let property = propertyNames[adx];
           if (imports[property] === undefined)

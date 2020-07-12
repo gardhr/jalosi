@@ -2,9 +2,9 @@
  "name": "jalosi",
  "major": 2,
  "minor": 2,
- "patch": 0,
- "version": "2.2.0",
- "modified": "Sat Jul 11 2020 23:10:42 GMT-0500 (Central Daylight Time)",
+ "patch": 1,
+ "version": "2.2.1",
+ "modified": "Sun Jul 12 2020 14:04:07 GMT-0500 (Central Daylight Time)",
  "description": "JAvascript LOading SImplified",
  "main": "jalosi.js",
  "repository": {
