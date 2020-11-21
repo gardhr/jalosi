@@ -68,6 +68,17 @@ module.exports = (function () {
       if (!options.sandbox) {
         if (imports.require === undefined && typeof require !== "undefined")
           conglomerate.require = require;
+        if (imports.module === undefined && typeof module !== "undefined")
+          conglomerate.module = module;
+        if (imports.exports === undefined && typeof exports !== "undefined")
+          conglomerate.exports = exports;
+        if (imports.__dirname === undefined && typeof __dirname !== "undefined")
+          conglomerate.__dirname = __dirname;
+        if (
+          imports.__filename === undefined &&
+          typeof __filename !== "undefined"
+        )
+          conglomerate.__filename = __filename;
 
         if (imports.compile === undefined) conglomerate.compile = compile;
         if (imports.run === undefined) conglomerate.run = run;

@@ -1,4 +1,4 @@
-var jalosi = require(".");
+var jalosi = require("./jalosi");
 var assert = require("assert");
 
 const complain = console.error;
