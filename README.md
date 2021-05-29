@@ -8,7 +8,7 @@
 
 - [Features](#features)
 - [Installation](#installation)
-- [Example](#examples)
+- [Example](#example)
 - [API](#api)
 
 ## Features
