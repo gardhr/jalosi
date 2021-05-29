@@ -4,7 +4,7 @@ module.exports = (function () {
   const { resolve, normalize, sep } = require("path");
   const { statSync, readFileSync } = require("fs");
 
-  function fileExists(fileName, throws) {
+  function fileExists(fileName) {
     try {
       return statSync(fileName).isFile();
     } catch (notFound) {
